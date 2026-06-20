@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ClearLane — Obstruction intelligence for Bengaluru Traffic Police</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0e15;--panel:#10161f;--line:#1d2733;--ink:#e9eff6;--muted:#7e8ea1;--faint:#46586d;
+    --flow:#15c8a0;--signal:#ffb020;--block:#ff5365;--accent:#4c8dff;--surge:#ffce4d;--maxw:1120px;}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .mono{font-family:'IBM Plex Mono',monospace}a{color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(10px);background:rgba(10,14,21,.7);border-bottom:1px solid transparent;transition:border-color .3s}
+  nav.scrolled{border-color:var(--line)}nav .row{display:flex;align-items:center;gap:18px;height:62px}
+  .logo{font-weight:700;font-size:19px;letter-spacing:1px}.logo b{color:var(--accent)}nav .sp{flex:1}
+  nav .nl{color:var(--muted);text-decoration:none;font-size:14px;display:none}@media(min-width:860px){nav .nl{display:inline}}
+  nav .nl:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font-family:'Space Grotesk';font-weight:600;font-size:14px;border-radius:10px;padding:10px 18px;text-decoration:none;transition:.15s}
+  .btn.primary{background:var(--accent);color:#fff}.btn.primary:hover{background:#3b7df0;transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.big{padding:16px 30px;font-size:16px;border-radius:12px}
+  .hero{padding:128px 0 70px}.hero .grid{display:grid;grid-template-columns:1fr;gap:42px;align-items:center}
+  @media(min-width:920px){.hero .grid{grid-template-columns:1.05fr .95fr}}
+  .eyebrow{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:3px;color:var(--flow);text-transform:uppercase;margin-bottom:20px}
+  h1{font-size:clamp(33px,5.2vw,57px);line-height:1.05;margin:0 0 20px;font-weight:700;letter-spacing:-.5px}h1 .hl{color:var(--accent)}
+  .lede{font-size:clamp(16px,2vw,19px);color:var(--muted);line-height:1.6;max-width:540px;margin:0 0 30px}.lede b{color:var(--ink);font-weight:500}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .micro{font-family:'IBM Plex Mono';font-size:12px;color:var(--faint);margin-top:18px}
+  .simcard{background:linear-gradient(180deg,#0d131c,#0a0e15);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 30px 80px -40px rgba(0,0,0,.8)}
+  .simcard canvas{width:100%;height:340px;display:block;border-radius:11px}
+  .simhint{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:0 4px;font-family:'IBM Plex Mono';font-size:11.5px;color:var(--muted)}
+  .simhint .pip{display:inline-flex;align-items:center;gap:6px}.sw{width:9px;height:9px;border-radius:50%;display:inline-block}
+  section{padding:84px 0;border-top:1px solid var(--line)}
+  .sec-eyebrow{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+  h2{font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:0 0 16px;font-weight:700;letter-spacing:-.4px}
+  .sec-lede{font-size:17px;color:var(--muted);line-height:1.6;max-width:640px}.sec-lede b{color:var(--ink);font-weight:500}
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.rv.in{opacity:1;transform:none}
+  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .stat .n{font-size:32px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .stat .n.flow{color:var(--flow)}.stat .n.block{color:var(--block)}.stat .n.signal{color:var(--signal)}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45;font-family:'IBM Plex Mono'}
+  .three{display:grid;grid-template-columns:1fr;gap:18px;margin-top:38px}@media(min-width:820px){.three{grid-template-columns:repeat(3,1fr)}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:24px}
+  .card .k{font-family:'IBM Plex Mono';font-size:12px;color:var(--accent);margin-bottom:12px}.card h3{margin:0 0 10px;font-size:18px}
+  .card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6}.card .x{color:var(--block);font-weight:600}
+  .pipe{display:grid;grid-template-columns:1fr;gap:14px;margin-top:38px}@media(min-width:880px){.pipe{grid-template-columns:repeat(4,1fr)}}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+  .step .num{font-family:'IBM Plex Mono';font-size:12px;color:var(--accent)}.step h4{margin:8px 0 8px;font-size:16px}
+  .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .split{display:grid;grid-template-columns:1fr;gap:18px;margin-top:38px}@media(min-width:760px){.split{grid-template-columns:1fr 1fr}}
+  .final{text-align:center;padding:100px 0}.final h2{margin-bottom:14px}.final p{color:var(--muted);max-width:560px;margin:0 auto 30px;font-size:17px;line-height:1.6}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--faint);font-family:'IBM Plex Mono';font-size:12.5px}
+  footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  @media(prefers-reduced-motion:reduce){.rv{transition:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="wrap row">
+  <span class="logo">CLEAR<b>·</b>LANE</span><span class="sp"></span>
+  <a class="nl" href="#problem">Problem</a><a class="nl" href="#insight">Insight</a>
+  <a class="nl" href="#how">How it works</a><a class="nl" href="#proof">Proof</a>
+  <a class="btn primary" href="/console">Launch live console →</a>
+</div></nav>
+
+<header class="hero"><div class="wrap grid">
+  <div>
+    <div class="eyebrow">Obstruction intelligence for BTP</div>
+    <h1>The jam has a cause. <span class="hl">Nobody measures it.</span></h1>
+    <p class="lede">Bengaluru already watches its roads with 7,500 cameras and an
+      AI command centre — but it counts congestion in <i>metres</i>, never in
+      <i>cause</i>. <b>ClearLane reads those same cameras to see what's actually
+      blocking each lane, sends the nearest crew to clear the worst spots first,
+      and steers delivery riders off the zones it's about to enforce.</b></p>
+    <div class="cta">
+      <a class="btn primary big" href="/console">▶ Launch live console</a>
+      <a class="btn ghost big" href="#problem">See how it works</a>
+    </div>
+    <div class="micro">Flipkart Gridlock Hackathon 2.0 · Theme: Parking-Induced Congestion</div>
+  </div>
+  <div class="simcard">
+    <canvas id="hero"></canvas>
+    <div class="simhint">
+      <span class="pip"><span class="sw" style="background:var(--block)"></span>Today — obstruction lingers</span>
+      <span class="pip"><span class="sw" style="background:var(--flow)"></span>ClearLane — cleared first</span>
+    </div>
+  </div>
+</div></header>
+
+<section id="problem"><div class="wrap">
+  <div class="sec-eyebrow rv">01 · The problem</div>
+  <h2 class="rv d1">A blocked lane is a parked vehicle nobody dispatched a crew to.</h2>
+  <p class="sec-lede rv d2">Parking-induced congestion is just stopped vehicles holding live lanes —
+    delivery riders, cars outside restaurants, autos waiting for fares. BTP can see the jam,
+    but not <b>which 150 metres is blocked, for how long, by whom</b>. Without that, scarce
+    crews patrol by gut.</p>
+  <div class="stats">
+    <div class="stat rv"><div class="n block" data-to="20000" data-prefix="₹" data-suffix=" cr">₹0</div><div class="l">Bengaluru's yearly congestion cost</div></div>
+    <div class="stat rv d1"><div class="n" data-to="7500" data-suffix="+">0</div><div class="l">Safe City cameras already watching</div></div>
+    <div class="stat rv d2"><div class="n signal" data-to="4">0</div><div class="l">enforcement crews on a corridor — the real scarcity</div></div>
+    <div class="stat rv d3"><div class="n block" data-to="0">0</div><div class="l">places obstruction-minutes are measured today</div></div>
+  </div>
+</div></section>
+
+<section id="why"><div class="wrap">
+  <div class="sec-eyebrow rv">02 · Why it's still unsolved</div>
+  <h2 class="rv d1">BTP has the cameras. It's missing the metric.</h2>
+  <p class="sec-lede rv d2">The tools that exist measure flow and length, not the stopped-vehicle cause —
+    and none of them tell a crew where to go next.</p>
+  <div class="three">
+    <div class="card rv"><div class="k">ASTraM</div><h3>Length, not cause</h3>
+      <p>BTP's award-winning platform shows congestion length in metres and hotspots.
+      <span class="x">It can't say a jam is caused by stopped vehicles, or which class.</span></p></div>
+    <div class="card rv d1"><div class="k">BATCS</div><h3>Signals, not curbs</h3>
+      <p>Adaptive signals optimise green time at junctions.
+      <span class="x">They do nothing about a lane blocked mid-link by a parked LCV.</span></p></div>
+    <div class="card rv d2"><div class="k">VIOLATION CV</div><h3>Fines, not flow</h3>
+      <p>Helmet/seatbelt detection punishes after the fact.
+      <span class="x">It never tells you which obstruction to clear to move traffic now.</span></p></div>
+  </div>
+</div></section>
+
+<section id="insight"><div class="wrap">
+  <div class="sec-eyebrow rv">03 · The insight</div>
+  <h2 class="rv d1">Optimise the scarce thing: the crew. Fix the controllable thing: the fleet.</h2>
+  <p class="sec-lede rv d2">Most obstruction is cars and autos — BTP can only clear those. Delivery vehicles
+    are different: a real and growing slice, and the one class software can actually redirect. So ClearLane
+    clears everything smarter, and stops the controllable part <b>before it starts</b>.</p>
+  <div class="three">
+    <div class="card rv"><div class="k">MEASURE</div><h3>Obstruction-minutes</h3><p>The missing primitive: how long each segment is blocked, by which vehicle class — from cameras BTP already runs.</p></div>
+    <div class="card rv d1"><div class="k">OPTIMISE</div><h3>Vehicle-minutes per crew-hour</h3><p>Send the next crew to the segment that clears the most blocking per trip — not the spot they always patrol.</p></div>
+    <div class="card rv d2"><div class="k">CLOSE THE LOOP</div><h3>Fleet advisory</h3><p>Push "enforcement active here" into rider apps so delivery vehicles stop blocking it at all.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="sec-eyebrow rv">04 · How it works</div>
+  <h2 class="rv d1">A loop that plugs into ASTraM — no new hardware.</h2>
+  <p class="sec-lede rv d2">Camera → obstruction engine → dispatch optimiser + fleet API. Every step uses
+    infrastructure BTP already owns and a workflow they already run (they tow near malls today).</p>
+  <div class="pipe">
+    <div class="step rv"><div class="num">01</div><h4>Detect</h4><p>Stopped-vehicle detection on existing CCTV measures obstruction-minutes per segment, by class.</p></div>
+    <div class="step rv d1"><div class="num">02</div><h4>Rank</h4><p>Segments ranked by live blocking, not chronic reputation — the new layer for ASTraM.</p></div>
+    <div class="step rv d2"><div class="num">03</div><h4>Dispatch</h4><p>The optimiser tells each crew where to go next to clear the most vehicle-minutes per hour.</p></div>
+    <div class="step rv d3"><div class="num">04</div><h4>Comply</h4><p>Fleets get a real-time advisory and reroute their stops — obstruction prevented at source.</p></div>
+  </div>
+</div></section>
+
+<section id="proof"><div class="wrap">
+  <div class="sec-eyebrow rv">05 · The proof</div>
+  <h2 class="rv d1">Same 4 crews. Same evening. Better outcomes.</h2>
+  <p class="sec-lede rv d2">Straight from the live console — today's gut-based patrol against ClearLane's
+    optimiser, one corridor, one evening, measured on the cameras BTP already runs.</p>
+  <div class="stats">
+    <div class="stat rv"><div class="n flow" data-to="51" data-suffix="%">0%</div><div class="l">less residual obstruction, same crews</div></div>
+    <div class="stat rv d1"><div class="n flow" data-to="115" data-prefix="+" data-suffix="%">0%</div><div class="l">more vehicle-minutes cleared per crew-hour</div></div>
+    <div class="stat rv d2"><div class="n signal" data-to="31" data-suffix=" min">0</div><div class="l">delivery obstruction avoided at source / evening</div></div>
+    <div class="stat rv d3"><div class="n flow" data-to="0" data-prefix="₹">₹0</div><div class="l">new hardware required</div></div>
+  </div>
+</div></section>
+
+<section id="tech"><div class="wrap">
+  <div class="sec-eyebrow rv">06 · Why it's defensible</div>
+  <h2 class="rv d1">Built for the room it's pitched in.</h2>
+  <div class="split">
+    <div class="card rv"><div class="k">FOR BTP</div><h3>Plugs into what you run</h3>
+      <p>An obstruction layer for ASTraM, a dispatch aid for the tow crews you already send out, on the
+      Safe City cameras you already paid for. One prioritised "clear here next" — no new screens for constables.</p></div>
+    <div class="card rv d1"><div class="k">FOR FLIPKART</div><h3>Fewer fines, faster drops</h3>
+      <p>The fleet API turns the largest controllable obstruction class into a partner: riders avoid
+      enforcement zones, cut challans and tows, and finish drops faster. An ESG and brand win, not a cost.</p></div>
+  </div>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <h2 class="rv">Watch it run.</h2>
+  <p class="rv d1">A sped-up evening on the Indiranagar / CMH Road corridor. Toggle today's gut-based
+    patrol against ClearLane's optimiser, open either team's screen on the map, then pre-stage crews
+    before an RCB match.</p>
+  <div class="rv d2"><a class="btn primary big" href="/console">▶ Launch live console</a></div>
+</div></section>
+
+<footer><div class="wrap row">
+  <span>CLEAR·LANE — obstruction intelligence &amp; dispatch for BTP</span>
+  <span>Gridlock Hackathon 2.0 · Parking-Induced Congestion</span>
+</div></footer>
+
+<script>
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  e.target.querySelectorAll?.('.n[data-to]').forEach(countUp);if(e.target.matches?.('.n[data-to]'))countUp(e.target);io.unobserve(e.target);}});},{threshold:.2});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+function countUp(el){if(el._done)return;el._done=true;const to=+el.dataset.to,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'';
+  const dur=1100,t0=performance.now();const fmt=v=>pre+Math.round(v).toLocaleString('en-IN')+suf;
+  (function tick(t){const k=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-k,3);el.textContent=fmt(to*e);
+    if(k<1)requestAnimationFrame(tick);else el.textContent=fmt(to);})(t0);}
+
+/* hero: two lanes, same arrivals. TOP = obstruction lingers (red, road blocked);
+   BOTTOM = ClearLane clears fast (vehicles pulled to kerb, green, road flows). */
+const hc=document.getElementById('hero'),hx=hc.getContext('2d');let W,H,vT=[],vB=[],lastSpawn=0;
+function sizeHero(){const r=hc.getBoundingClientRect();hc.width=r.width*devicePixelRatio;hc.height=r.height*devicePixelRatio;
+  hx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);W=r.width;H=r.height;}
+addEventListener('resize',sizeHero);sizeHero();
+function mk(f){return {x:-30,stopX:f*W,state:'go',dwell:0,t:Math.random()*6};}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function lane(list,y,mode){
+  hx.strokeStyle='#172230';hx.lineWidth=20;hx.beginPath();hx.moveTo(0,y);hx.lineTo(W,y);hx.stroke();
+  hx.strokeStyle=mode==='clear'?'rgba(21,200,160,.35)':'rgba(255,83,101,.18)';hx.lineWidth=2;
+  hx.beginPath();hx.moveTo(0,y+14);hx.lineTo(W,y+14);hx.stroke();
+  for(const v of list){let vy=y,col='#4c8dff';
+    if(v.state==='park'){if(mode==='clear'){vy=y+14;col='#15c8a0';}else{col='#ff5365';vy=y+Math.sin(v.t*8)*0.6;}}
+    hx.fillStyle=col;rr(hx,v.x-9,vy-5,18,10,3);hx.fill();
+    if(v.state==='park'&&mode!=='clear'){hx.fillStyle='rgba(255,83,101,.14)';hx.beginPath();hx.arc(v.x,vy,16,0,7);hx.fill();}}}
+function step(dt){lastSpawn+=dt;if(lastSpawn>0.95){lastSpawn=0;const f=.18+Math.random()*.62;vT.push(mk(f));vB.push(mk(f));}
+  const adv=(list,mode)=>{for(const v of list){v.t+=dt;
+    if(v.state==='go'){v.x+=70*dt;if(v.x>=v.stopX){v.state='park';v.dwell=0;}}
+    else if(v.state==='park'){v.dwell+=dt;if(v.dwell>(mode==='clear'?1.4:2.8))v.state='leave';}
+    else v.x+=70*dt;}return list.filter(v=>v.x<W+40);};
+  vT=adv(vT,'block');vB=adv(vB,'clear');}
+let lastT=performance.now();
+function loopHero(t){const dt=Math.min(.05,(t-lastT)/1000);lastT=t;step(dt);hx.clearRect(0,0,W,H);
+  lane(vT,H*0.34,'block');lane(vB,H*0.72,'clear');
+  hx.font="600 12px 'IBM Plex Mono'";hx.fillStyle='rgba(255,83,101,.9)';hx.fillText('WITHOUT CLEARLANE',12,H*0.34-22);
+  hx.fillStyle='rgba(21,200,160,.9)';hx.fillText('WITH CLEARLANE',12,H*0.72-22);requestAnimationFrame(loopHero);}
+requestAnimationFrame(loopHero);
+</script>
+</body>
+</html>
