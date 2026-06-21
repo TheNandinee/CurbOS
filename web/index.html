@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ClearLane — Obstruction intelligence for Bengaluru Traffic Police</title>
+<title>CurbOS — Obstruction intelligence for Bengaluru Traffic Police</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -74,7 +74,7 @@
     <h1>The jam has a cause. <span class="hl">Nobody measures it.</span></h1>
     <p class="lede">Bengaluru already watches its roads with 7,500 cameras and an
       AI command centre — but it counts congestion in <i>metres</i>, never in
-      <i>cause</i>. <b>ClearLane reads those same cameras to see what's actually
+      <i>cause</i>. <b>CurbOS reads those same cameras to see what's actually
       blocking each lane, sends the nearest crew to clear the worst spots first,
       and steers delivery riders off the zones it's about to enforce.</b></p>
     <div class="cta">
@@ -87,7 +87,7 @@
     <canvas id="hero"></canvas>
     <div class="simhint">
       <span class="pip"><span class="sw" style="background:var(--block)"></span>Today — obstruction lingers</span>
-      <span class="pip"><span class="sw" style="background:var(--flow)"></span>ClearLane — cleared first</span>
+      <span class="pip"><span class="sw" style="background:var(--flow)"></span>CurbOS — cleared first</span>
     </div>
   </div>
 </div></header>
@@ -129,7 +129,7 @@
   <div class="sec-eyebrow rv">03 · The insight</div>
   <h2 class="rv d1">Optimise the scarce thing: the crew. Fix the controllable thing: the fleet.</h2>
   <p class="sec-lede rv d2">Most obstruction is cars and autos — BTP can only clear those. Delivery vehicles
-    are different: a real and growing slice, and the one class software can actually redirect. So ClearLane
+    are different: a real and growing slice, and the one class software can actually redirect. So CurbOS
     clears everything smarter, and stops the controllable part <b>before it starts</b>.</p>
   <div class="three">
     <div class="card rv"><div class="k">MEASURE</div><h3>Obstruction-minutes</h3><p>The missing primitive: how long each segment is blocked, by which vehicle class — from cameras BTP already runs.</p></div>
@@ -154,7 +154,7 @@
 <section id="proof"><div class="wrap">
   <div class="sec-eyebrow rv">05 · The proof</div>
   <h2 class="rv d1">Same 4 crews. Same evening. Better outcomes.</h2>
-  <p class="sec-lede rv d2">Straight from the live console — today's gut-based patrol against ClearLane's
+  <p class="sec-lede rv d2">Straight from the live console — today's gut-based patrol against CurbOS's
     optimiser, one corridor, one evening, measured on the cameras BTP already runs.</p>
   <div class="stats">
     <div class="stat rv"><div class="n flow" data-to="51" data-suffix="%">0%</div><div class="l">less residual obstruction, same crews</div></div>
@@ -180,7 +180,7 @@
 <section class="final"><div class="wrap">
   <h2 class="rv">Watch it run.</h2>
   <p class="rv d1">A sped-up evening on the Indiranagar / CMH Road corridor. Toggle today's gut-based
-    patrol against ClearLane's optimiser, open either team's screen on the map, then pre-stage crews
+    patrol against CurbOS's optimiser, open either team's screen on the map, then pre-stage crews
     before an RCB match.</p>
   <div class="rv d2"><a class="btn primary big" href="/console">▶ Launch live console</a></div>
 </div></section>
@@ -202,7 +202,7 @@ function countUp(el){if(el._done)return;el._done=true;const to=+el.dataset.to,pr
     if(k<1)requestAnimationFrame(tick);else el.textContent=fmt(to);})(t0);}
 
 /* hero: two lanes, same arrivals. TOP = obstruction lingers (red, road blocked);
-   BOTTOM = ClearLane clears fast (vehicles pulled to kerb, green, road flows). */
+   BOTTOM = CurbOS clears fast (vehicles pulled to kerb, green, road flows). */
 const hc=document.getElementById('hero'),hx=hc.getContext('2d');let W,H,vT=[],vB=[],lastSpawn=0;
 function sizeHero(){const r=hc.getBoundingClientRect();hc.width=r.width*devicePixelRatio;hc.height=r.height*devicePixelRatio;
   hx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);W=r.width;H=r.height;}
@@ -226,8 +226,8 @@ function step(dt){lastSpawn+=dt;if(lastSpawn>0.95){lastSpawn=0;const f=.18+Math.
 let lastT=performance.now();
 function loopHero(t){const dt=Math.min(.05,(t-lastT)/1000);lastT=t;step(dt);hx.clearRect(0,0,W,H);
   lane(vT,H*0.34,'block');lane(vB,H*0.72,'clear');
-  hx.font="600 12px 'IBM Plex Mono'";hx.fillStyle='rgba(255,83,101,.9)';hx.fillText('WITHOUT CLEARLANE',12,H*0.34-22);
-  hx.fillStyle='rgba(21,200,160,.9)';hx.fillText('WITH CLEARLANE',12,H*0.72-22);requestAnimationFrame(loopHero);}
+  hx.font="600 12px 'IBM Plex Mono'";hx.fillStyle='rgba(255,83,101,.9)';hx.fillText('WITHOUT CurbOS',12,H*0.34-22);
+  hx.fillStyle='rgba(21,200,160,.9)';hx.fillText('WITH CurbOS',12,H*0.72-22);requestAnimationFrame(loopHero);}
 requestAnimationFrame(loopHero);
 </script>
 </body>
