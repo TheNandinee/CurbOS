@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ClearLane — Operations Console</title>
+<title>CurbOS — Operations Console</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -113,14 +113,14 @@
 </head>
 <body>
 <div class="onb" id="onb"><div class="box">
-  <h2>ClearLane — Operations Console</h2>
+  <h2>CurbOS — Operations Console</h2>
   <p>One evening on the Indiranagar / CMH Road corridor, live on the map. Segments glow with
      obstruction; crews move to clear it. Then open either stakeholder's screen, on top of the map.</p>
   <div class="cols">
     <div class="col btp"><h4>◧ BTP Control Room</h4><p>The junction up close + a "clear here next" dispatch board for the tow/officer crews.</p></div>
     <div class="col flk"><h4>◧ Flipkart Fleet Ops</h4><p>Riders rerouted off enforcement zones — challans, tows and rider-minutes saved, in rupees.</p></div>
   </div>
-  <p>Toggle <b>Today</b> vs <b>ClearLane</b> to watch the map and both screens change.</p>
+  <p>Toggle <b>Today</b> vs <b>CurbOS</b> to watch the map and both screens change.</p>
   <button id="onbGo">Start the evening →</button>
 </div></div>
 
@@ -132,7 +132,7 @@
   <div class="spacer"></div>
   <button class="panelbtn btp" id="btnBTP">◧ BTP Control Room</button>
   <button class="panelbtn flk" id="btnFLK">◧ Flipkart Fleet Ops</button>
-  <div class="toggle"><button id="mADHOC">Today</button><button id="mOPT" class="on good">ClearLane</button></div>
+  <div class="toggle"><button id="mADHOC">Today</button><button id="mOPT" class="on good">CurbOS</button></div>
   <div class="clock" id="clock">18:00<small id="phase">EVENING</small></div>
   <button class="ic" id="restart">⟲</button><button class="ic" id="play">⏸</button><button class="ic speed" id="speed">2×</button>
 </div>
@@ -174,7 +174,7 @@
     </div>
     <div class="sec"><h3>Dispatch board — clear here next</h3><div id="board"></div></div>
     <div class="sec"><h3>Corridor residual obstruction · live</h3><canvas class="chart" id="chart"></canvas>
-      <div class="clegend"><span><i style="background:var(--block)"></i>Today</span><span><i style="background:var(--flow)"></i>ClearLane</span></div></div>
+      <div class="clegend"><span><i style="background:var(--block)"></i>Today</span><span><i style="background:var(--flow)"></i>CurbOS</span></div></div>
   </div>
 </div>
 
@@ -249,7 +249,7 @@ function render(){
   document.getElementById('phase').textContent=h>=20?'DINNER PEAK':h>=19?'RUSH':'EVENING';
   const cap=document.getElementById('caption');
   if(MODE==='adhoc')cap.innerHTML='<span class="warn">Today — gut-based patrol.</span> Crews chase chronic spots; obstruction lingers.';
-  else cap.innerHTML='<b>ClearLane</b> — crews sent to the highest vehicle-minutes-per-trip; delivery reroutes on advisory.';
+  else cap.innerHTML='<b>CurbOS</b> — crews sent to the highest vehicle-minutes-per-trip; delivery reroutes on advisory.';
   renderMap(d);
   renderCorridorKPIs();
   renderFleet(d,prog);                 // updates the ₹ KPI chip even when panel closed
